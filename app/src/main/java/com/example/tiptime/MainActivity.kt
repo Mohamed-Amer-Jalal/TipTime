@@ -23,8 +23,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -37,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,8 +52,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TipTimeTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    TipTimeLayout()
+                Scaffold(Modifier.fillMaxSize()) { innerPadding ->
+                    TipTimeLayout(Modifier.padding(innerPadding))
                 }
             }
         }
@@ -59,9 +61,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TipTimeLayout() {
+fun TipTimeLayout(modifier: Modifier) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .statusBarsPadding()
             .padding(horizontal = 40.dp)
             .verticalScroll(rememberScrollState())
@@ -77,7 +79,7 @@ fun TipTimeLayout() {
         val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
         val tip = calculateTip(amount, tipPercent, roundUp)
 
-        Text(
+        TextTip(
             text = stringResource(R.string.calculate_tip),
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 40.dp)
@@ -114,7 +116,7 @@ fun TipTimeLayout() {
             onRoundUpChanged = { roundUp = it },
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        Text(
+        TextTip(
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
@@ -152,7 +154,7 @@ fun RoundTheTipRow(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(R.string.round_up_tip))
+        TextTip(text = stringResource(R.string.round_up_tip))
         Switch(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,6 +165,17 @@ fun RoundTheTipRow(
     }
 }
 
+@Composable
+fun TextTip(
+    text: String,
+    modifier: Modifier = Modifier,
+    style: TextStyle = LocalTextStyle.current
+) {
+    Text(
+        text = text, modifier = modifier, style = style
+    )
+}
+
 @VisibleForTesting
 internal fun calculateTip(amount: Double, tipPercent: Double, roundUp: Boolean): String {
     var tip = tipPercent / 100 * amount
@@ -170,10 +183,12 @@ internal fun calculateTip(amount: Double, tipPercent: Double, roundUp: Boolean):
     return NumberFormat.getCurrencyInstance().format(tip)
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun GreetingPreview() {
     TipTimeTheme {
-        TipTimeLayout()
+        Scaffold(Modifier.fillMaxSize()) { innerPadding ->
+            TipTimeLayout(Modifier.padding(innerPadding))
+        }
     }
 }
