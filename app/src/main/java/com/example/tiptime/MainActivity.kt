@@ -23,7 +23,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -38,7 +37,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -79,7 +77,7 @@ fun TipTimeLayout(modifier: Modifier) {
         val tipPercent = tipInput.toDoubleOrNull() ?: 0.0
         val tip = calculateTip(amount, tipPercent, roundUp)
 
-        TextTip(
+        Text(
             text = stringResource(R.string.calculate_tip),
             modifier = Modifier
                 .padding(bottom = 16.dp, top = 40.dp)
@@ -116,7 +114,7 @@ fun TipTimeLayout(modifier: Modifier) {
             onRoundUpChanged = { roundUp = it },
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        TextTip(
+        Text(
             text = stringResource(R.string.tip_amount, tip),
             style = MaterialTheme.typography.displaySmall
         )
@@ -154,7 +152,7 @@ fun RoundTheTipRow(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        TextTip(text = stringResource(R.string.round_up_tip))
+        Text(text = stringResource(R.string.round_up_tip))
         Switch(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,17 +161,6 @@ fun RoundTheTipRow(
             onCheckedChange = onRoundUpChanged
         )
     }
-}
-
-@Composable
-fun TextTip(
-    text: String,
-    modifier: Modifier = Modifier,
-    style: TextStyle = LocalTextStyle.current
-) {
-    Text(
-        text = text, modifier = modifier, style = style
-    )
 }
 
 @VisibleForTesting

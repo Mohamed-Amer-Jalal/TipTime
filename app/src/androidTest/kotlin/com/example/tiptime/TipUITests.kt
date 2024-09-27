@@ -20,7 +20,7 @@ class TipUITests {
         composeTestRule.setContent {
             TipTimeTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    TipTimeLayout()
+                    TipTimeLayout(modifier = Modifier)
                 }
             }
         }
